@@ -24,5 +24,4 @@ def uploadfile(request):
             for threat in data:
                 Threat.objects.update_or_create(date=datetime.strptime(threat['date'],'%b %d, %Y %H:%M:%S'), filename=threat['filename'],
                 action=threat['action'],submit_type=threat['submit-type'],rating=threat['rating'])
-            return HttpResponseRedirect(reverse('threatapp:index'))
-    return render(request,'threatapp/index.html',{'form':form})
+    return HttpResponseRedirect(reverse('threatapp:index'))

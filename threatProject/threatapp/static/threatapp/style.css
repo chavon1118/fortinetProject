@@ -1,0 +1,19 @@
+.clean{
+    color:green;
+}
+
+.malicious{
+    color:red;
+}
+
+.medium-risk{
+    color:yellow;
+}
+
+.low-risk{
+    color:blue;
+}
+
+.high-risk{
+    color:orange;
+}
