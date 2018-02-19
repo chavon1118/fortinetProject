@@ -16,7 +16,7 @@ $(document).ready(function() {
             
             success: function (json) {
                 if (json.data.length > 0) {
-                    updateThreatTable(data);
+                    updateThreatTable(json.data);
                 }
             },
             
@@ -34,7 +34,7 @@ $(document).ready(function() {
             
             success: function (json) {
                 if (json.data.length > 0) {
-                    updateThreatTable(data);
+                    updateThreatTable(json.data);
                 }
             },
             

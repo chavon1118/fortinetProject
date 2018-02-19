@@ -2,7 +2,6 @@ import json, os, sys
 from datetime import datetime
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views import generic
-from django.shortcuts import render
 from django.urls import reverse
 from .models import Threat, MetaFile
 from django.core.files.storage import FileSystemStorage
@@ -46,14 +45,16 @@ def checkupdate(request):
                     file_record = MetaFile.objects.filter(filename=file).count()
                     if file_record == 0:
                         threatfile = fs.open(file)
-                        data.append(updateDatabase(threatfile))
+                        data += updateDatabase(threatfile)
                         MetaFile.objects.create(filename=file,is_imported=True)
         return JsonResponse({"data": data})
 
 def updateDatabase(threatfile):
+    data = []
     for chunk in threatfile.chunks():
-        data = json.loads(chunk.decode('utf-8').replace("'",'"'))
-        for threat in data:
+        data_chunk = json.loads(chunk.decode('utf-8').replace("'",'"'))
+        data+=data_chunk
+        for threat in data_chunk:
             Threat.objects.update_or_create(date=datetime.strptime(threat['date'],'%b %d, %Y %H:%M:%S'), filename=threat['filename'],
             action=threat['action'],submit_type=threat['submit-type'],rating=threat['rating'])
     return data
