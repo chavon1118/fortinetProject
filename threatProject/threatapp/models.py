@@ -9,3 +9,10 @@ class Threat(models.Model):
 			
     def __str__(self):
         return self.filename
+
+class MetaFile(models.Model):
+    filename = models.CharField(max_length=128)
+    is_imported = models.BooleanField()
+    
+    def __str__(self):
+        return self.filename
