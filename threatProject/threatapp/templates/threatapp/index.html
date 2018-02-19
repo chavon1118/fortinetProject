@@ -48,5 +48,5 @@
 <form action="{% url 'threatapp:uploadfile' %}" method="post" enctype="multipart/form-data">
 {% csrf_token %}
 <input type="file" name="threatfile" accept="file_extension">
-<input type="submit" value="Upload" />
+<button type="submit"/>Upload</button>
 </form>
