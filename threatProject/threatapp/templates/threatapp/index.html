@@ -1,57 +1,70 @@
 {% load static %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'threatapp/style.css' %}" />
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script src="{% static 'threatapp/javascript/threatapp_controller.js' %}"></script>
-
-{% if threats_list %}
-<table>
-<thead>
-    <tr>
-        <th>File Name</th>
-        <th>Submit Type</th>
-        <th>Action</th>
-        <th>Rating</th>
-        <th>Date</th>
-    </tr>
-</thead>
-<tbody>
-    {% for threat in threats_list %}
-    <tr class="{{ threat.rating }}">
-        <td>{{ threat.filename }}</td>
-        <td>{{ threat.submit_type }}</td>
-        <td>{{ threat.action }}</td>
-        <td>{{ threat.rating }}</td>
-        <td>{{ threat.date }}</td>
-    </tr>
-    {% endfor %}
-</tbody>
-</table>
-{% else %}
-    <p>No threats are available.</p>
-{% endif %}
-
-{% block pagination %}
-  {% if is_paginated %}
-      <div class="pagination">
-          <span class="page-links">
-              {% if page_obj.has_previous %}
-                  <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
-              {% endif %}
-              <span class="page-current">
-                  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-              </span>
-              {% if page_obj.has_next %}
-                  <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
-              {% endif %}
-          </span>
-      </div>
-  {% endif %}
-{% endblock %} 
-
-<form action="{% url 'threatapp:uploadfile' %}" method="post" enctype="multipart/form-data">
-{% csrf_token %}
-<input id="threatfile" type="file" name="threatfile" accept="file_extension" data-url="{% url 'threatapp:uploadfile' %}" >
-<button id="uploadfile" type="submit"/>Upload</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'threatapp/style.css' %}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="{% static 'threatapp/javascript/threatapp_controller.js' %}"></script>
+</head>
+<body>
+    <div class="threat-table-container table-responsive">
+        {% if threats_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Submit Type</th>
+                    <th>Action</th>
+                    <th>Rating</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for threat in threats_list %}
+                <tr class="{{ threat.rating }}">
+                    <td>{{ threat.filename }}</td>
+                    <td>{{ threat.submit_type }}</td>
+                    <td>{{ threat.action }}</td>
+                    <td>{{ threat.rating }}</td>
+                    <td>{{ threat.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>No threats are available.</p>
+        {% endif %}
+    
+        {% block pagination %}
+        {% if is_paginated %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="btn btn-default">previous</a>
+                    {% endif %}
+                    <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" class="btn btn-default">next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+        {% endblock %}
+    </div>
+    <div class="threat-upload-container">
+        <form action="{% url 'threatapp:uploadfile' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label class="btn btn-primary" for="threatfile">
+                <input id="threatfile" type="file" name="threatfile" accept="file_extension" data-url="{% url 'threatapp:uploadfile' %} " style="display:none;">
+                Choose a JSON File
+            </label>
+            
+            <button id="uploadfile" type="submit" class="btn btn-default"/>Upload</button>
+        </form>
+    </div>
+</body>
+</html>
