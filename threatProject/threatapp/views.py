@@ -14,7 +14,8 @@ class IndexView(generic.ListView):
     paginate_by = 20
     
     def get_queryset(self):
-        return Threat.objects.order_by('date')
+        order_by = self.request.GET.get('order_by', 'date')
+        return Threat.objects.order_by(order_by)
 
 # user can upload json meta file to add threats to database
 def uploadfile(request):
